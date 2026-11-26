@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belajar Pecahan - Matematika Kelas 7</title>
+<style>
+:root{--bg:#fff;--ink:#111;--side:#0b2a5b;--sideink:#fff;--acc:#d35400;--ok:#0a6b2d;--card:#f4f7fc;--line:#0b2a5b}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;font-size:20px;line-height:1.6;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+nav{width:250px;background:var(--side);color:var(--sideink);padding:16px;position:sticky;top:0;height:100vh;flex-shrink:0}
+nav h1{font-size:20px;margin:0 0 16px;line-height:1.3}
+nav button{display:block;width:100%;text-align:left;font-size:19px;padding:12px;margin-bottom:8px;border:2px solid #fff;background:transparent;color:#fff;border-radius:10px;cursor:pointer}
+nav button.on,nav button:hover{background:#fff;color:var(--side);font-weight:bold}
+main{flex:1;padding:24px;max-width:900px}
+section{display:none}
+section.on{display:block}
+h2{font-size:28px;margin-top:0;color:var(--side)}
+.card{background:var(--card);border:3px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+.btn{font-size:20px;padding:12px 22px;border:3px solid var(--side);background:var(--side);color:#fff;border-radius:10px;cursor:pointer;margin:6px 6px 0 0}
+.btn.alt{background:#fff;color:var(--side)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.frac{display:inline-block;text-align:center;vertical-align:middle;font-weight:bold;margin:0 4px}
+.frac span{display:block;padding:0 6px}
+.frac span:first-child{border-bottom:3px solid currentColor}
+.big{font-size:34px}
+label{display:block;font-weight:bold;margin-top:10px}
+input[type=range]{width:100%;height:36px;accent-color:var(--acc)}
+svg{max-width:100%;height:auto}
+.ans{display:none;background:#e6f6ea;border:3px solid var(--ok);border-radius:12px;padding:12px;margin-top:10px}
+.ans.show{display:block}
+.prog{font-weight:bold;color:var(--acc)}
+ul{padding-left:24px}
+.row{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center}
+@media(max-width:700px){
+body{flex-direction:column;font-size:19px}
+nav{width:100%;height:auto;position:sticky;z-index:5;padding:8px;display:flex;flex-wrap:wrap;gap:6px}
+nav h1{display:none}
+nav button{width:auto;flex:1 1 30%;margin:0;padding:8px;font-size:15px;text-align:center}
+main{padding:14px}
+h2{font-size:24px}
+}
+</style>
+</head>
+<body>
+<nav aria-label="Menu">
+<h1>🍕 Pecahan<br>Kelas 7</h1>
+<button class="on" data-t="tujuan">1. Tujuan</button>
+<button data-t="pemantik">2. Pemantik</button>
+<button data-t="penjelasan">3. Penjelasan</button>
+<button data-t="visual">4. Visualisasi</button>
+<button data-t="soal">5. Contoh Soal</button>
+<button data-t="rangkuman">6. Rangkuman</button>
+</nav>
+<main>
+
+<section id="tujuan" class="on">
+<h2>Belajar Pecahan</h2>
+<p>Matematika • Kelas 7 • Tingkat semi-abstrak</p>
+<div class="card">
+<b>Tujuan pembelajaran. Setelah belajar, kamu bisa:</b>
+<ul>
+<li>Menjelaskan arti pembilang dan penyebut.</li>
+<li>Menggambar pecahan dengan model lingkaran dan batang.</li>
+<li>Mencari pecahan senilai.</li>
+<li>Membandingkan dua pecahan.</li>
+</ul>
+</div>
+<button class="btn" onclick="go('pemantik')">Mulai ➜</button>
+</section>
+
+<section id="pemantik">
+<h2>Pemantik</h2>
+<div class="card">
+<p>Kamu punya 1 pizza. Kamu makan bersama 3 temanmu. Pizza dibagi sama besar.</p>
+<p><b>Berapa bagian pizza yang kamu dapat?</b></p>
+<p><b>Bagaimana jika yang makan 7 orang?</b></p>
+<p>Apakah bagianmu jadi lebih besar atau lebih kecil?</p>
+</div>
+<button class="btn" onclick="this.nextElementSibling.classList.add('show')">Lihat jawaban</button>
+<div class="ans">Dibagi 4 orang, tiap orang dapat <span class="frac"><span>1</span><span>4</span></span> pizza.
+Dibagi 7 orang, tiap orang dapat <span class="frac"><span>1</span><span>7</span></span> pizza.
+Makin banyak orang, makin kecil bagianmu. Mari kita pelajari ceritanya.</div>
+<p><button class="btn" onclick="go('penjelasan')">Lanjut ke Penjelasan ➜</button></p>
+</section>
+
+<section id="penjelasan">
+<h2>Penjelasan Bertahap</h2>
+<p class="prog" id="prog"></p>
+<div class="card" id="stepbox" style="min-height:220px"></div>
+<button class="btn alt" id="back">⬅ Kembali</button>
+<button class="btn" id="next">Lanjut ➜</button>
+</section>
+
+<section id="visual">
+<h2>Visualisasi Interaktif</h2>
+<p>Geser slider. Lihat gambar berubah.</p>
+<div class="card">
+<label>Penyebut (total bagian sama besar): <span id="dv">4</span></label>
+<input type="range" id="d" min="1" max="12" value="4">
+<label>Pembilang (bagian yang diambil): <span id="nv">3</span></label>
+<input type="range" id="n" min="0" max="12" value="3">
+</div>
+<div class="row">
+<svg id="pie" width="260" height="260" viewBox="0 0 260 260" role="img" aria-label="Model lingkaran"></svg>
+<svg id="bar" width="300" height="120" viewBox="0 0 300 120" role="img" aria-label="Model batang"></svg>
+</div>
+<div class="card" id="info" style="text-align:center"></div>
+<p>Coba: geser pembilang sama dengan penyebut. Apa yang terjadi?</p>
+</section>
+
+<section id="soal">
+<h2>Contoh Soal</h2>
+
+<div class="card">
+<b>Soal 1.</b> Sebatang cokelat dibagi 8 kotak sama besar. Adik makan 3 kotak. Nyatakan dalam pecahan.
+<br><button class="btn" onclick="tg(this)">Lihat pembahasan</button>
+<div class="ans">
+<p>Langkah 1: Total kotak = 8. Ini <b>penyebut</b>.</p>
+<p>Langkah 2: Kotak yang dimakan = 3. Ini <b>pembilang</b>.</p>
+<p>Jawaban: <span class="frac"><span>3</span><span>8</span></span> bagian cokelat.</p>
+</div>
+</div>
+
+<div class="card">
+<b>Soal 2.</b> Isi titik-titik: <span class="frac"><span>2</span><span>3</span></span> = <span class="frac"><span>…</span><span>12</span></span>
+<br><button class="btn" onclick="tg(this)">Lihat pembahasan</button>
+<div class="ans">
+<p>Langkah 1: Penyebut 3 menjadi 12. Dikali 4 (karena 3 × 4 = 12).</p>
+<p>Langkah 2: Pembilang harus dikali 4 juga. 2 × 4 = 8.</p>
+<p>Jawaban: <span class="frac"><span>2</span><span>3</span></span> = <span class="frac"><span>8</span><span>12</span></span></p>
+<p>Kalikan atas dan bawah dengan bilangan yang sama. Nilainya tidak berubah.</p>
+</div>
+</div>
+
+<div class="card">
+<b>Soal 3.</b> Mana yang lebih besar: <span class="frac"><span>3</span><span>4</span></span> atau <span class="frac"><span>5</span><span>8</span></span>?
+<br><button class="btn" onclick="tg(this)">Lihat pembahasan</button>
+<div class="ans">
+<p>Langkah 1: Samakan penyebut. KPK dari 4 dan 8 adalah 8.</p>
+<p>Langkah 2: <span class="frac"><span>3</span><span>4</span></span> = <span class="frac"><span>6</span><span>8</span></span>.</p>
+<p>Langkah 3: Bandingkan <span class="frac"><span>6</span><span>8</span></span> dan <span class="frac"><span>5</span><span>8</span></span>. Karena 6 &gt; 5, maka yang lebih besar adalah <span class="frac"><span>3</span><span>4</span></span>.</p>
+</div>
+</div>
+</section>
+
+<section id="rangkuman">
+<h2>Rangkuman</h2>
+<div class="card">
+<ul>
+<li>Pecahan = <span class="frac"><span>pembilang</span><span>penyebut</span></span></li>
+<li>Penyebut: total bagian yang sama besar.</li>
+<li>Pembilang: bagian yang diambil.</li>
+<li>Pecahan senilai: kalikan atau bagi atas dan bawah dengan bilangan yang sama.</li>
+<li>Membandingkan: samakan penyebut, lalu lihat pembilang.</li>
+<li>Penyebut makin besar, tiap bagian makin kecil.</li>
+</ul>
+</div>
+<p><b>Hebat! Kamu sudah belajar pecahan.</b> 🎉</p>
+<button class="btn alt" onclick="go('tujuan')">Ulangi dari awal</button>
+</section>
+
+</main>
+<script>
+var $=function(i){return document.getElementById(i)};
+function go(id){
+document.querySelectorAll('section').forEach(function(s){s.classList.toggle('on',s.id===id)});
+document.querySelectorAll('nav button').forEach(function(b){b.classList.toggle('on',b.dataset.t===id)});
+window.scrollTo(0,0);
+}
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){go(b.dataset.t)}});
+function tg(b){b.nextElementSibling.classList.toggle('show')}
+
+/* Penjelasan bertahap */
+var F=function(a,b){return '<span class="frac"><span>'+a+'</span><span>'+b+'</span></span>'};
+var steps=[
+'<b>Langkah 1: Apa itu pecahan?</b><p>Pecahan adalah bagian dari keseluruhan.</p><p>Contoh: 1 roti dipotong 2 sama besar. Satu potong = '+F(1,2)+' roti.</p>',
+'<b>Langkah 2: Dua bagian pecahan</b><p>Contoh: '+F(3,4)+'</p><p><b>Penyebut (bawah) = 4</b>: roti dibagi 4 sama besar.</p><p><b>Pembilang (atas) = 3</b>: kita ambil 3 bagian.</p>',
+'<b>Langkah 3: Syarat penting</b><p>Bagian harus <b>sama besar</b>.</p><p>Jika tidak sama besar, itu bukan pecahan.</p>',
+'<b>Langkah 4: Pecahan senilai</b><p>'+F(1,2)+' = '+F(2,4)+' = '+F(4,8)+'</p><p>Gambarnya beda, tetapi luas yang diarsir sama.</p><p>Caranya: kalikan atas dan bawah dengan bilangan yang sama.</p>',
+'<b>Langkah 5: Membandingkan</b><p>Samakan penyebutnya dahulu.</p><p>Contoh: '+F(1,2)+' dan '+F(3,8)+'. Ubah '+F(1,2)+' menjadi '+F(4,8)+'. Karena 4 &gt; 3, maka '+F(1,2)+' lebih besar.</p><p>Sekarang coba sendiri di menu <b>Visualisasi</b>.</p>'
+];
+var si=0;
+function showStep(){
+$('stepbox').innerHTML=steps[si];
+$('prog').textContent='Langkah '+(si+1)+' dari '+steps.length;
+$('back').disabled=si===0;
+$('next').textContent=si===steps.length-1?'Ke Visualisasi ➜':'Lanjut ➜';
+}
+$('back').onclick=function(){if(si>0){si--;showStep()}};
+$('next').onclick=function(){if(si<steps.length-1){si++;showStep()}else{go('visual')}};
+showStep();
+
+/* Visualisasi */
+var COL='#d35400',EMP='#ffffff',ST='#0b2a5b';
+function gcd(a,b){return b?gcd(b,a%b):a}
+function draw(){
+var d=+$('d').value;
+$('n').max=d;
+var n=Math.min(+$('n').value,d);
+$('n').value=n;
+$('dv').textContent=d;$('nv').textContent=n;
+var cx=130,cy=130,r=115,h='';
+if(d===1){
+h='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(n>=1?COL:EMP)+'" stroke="'+ST+'" stroke-width="3"/>';
+}else{
+for(var i=0;i<d;i++){
+var a1=-Math.PI/2+i*2*Math.PI/d,a2=-Math.PI/2+(i+1)*2*Math.PI/d;
+var x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+h+='<path d="M'+cx+','+cy+' L'+x1.toFixed(1)+','+y1.toFixed(1)+' A'+r+','+r+' 0 0 1 '+x2.toFixed(1)+','+y2.toFixed(1)+' Z" fill="'+(i<n?COL:EMP)+'" stroke="'+ST+'" stroke-width="3"/>';
+}}
+$('pie').innerHTML=h;
+var w=280/d,b='';
+for(var j=0;j<d;j++){
+b+='<rect x="'+(10+j*w)+'" y="30" width="'+w+'" height="60" fill="'+(j<n?COL:EMP)+'" stroke="'+ST+'" stroke-width="3"/>';
+}
+$('bar').innerHTML=b;
+var g=n===0?d:gcd(n,d),s=F(n/g,d/g);
+var pct=Math.round(n/d*1000)/10;
+var t='<div class="big">'+F(n,d)+'</div>';
+t+='<p>'+n+' dari '+d+' bagian diarsir.</p>';
+t+='<p>Nilai desimal: <b>'+(Math.round(n/d*100)/100)+'</b> • Persen: <b>'+pct+'%</b></p>';
+if(n===0)t+='<p>Tidak ada bagian yang diarsir.</p>';
+else if(n===d)t+='<p>Semua bagian diarsir. Nilainya <b>1 utuh</b>.</p>';
+else if(g>1)t+='<p>Bentuk paling sederhana: '+s+'</p>';
+else t+='<p>Sudah bentuk paling sederhana.</p>';
+$('info').innerHTML=t;
+}
+$('d').oninput=draw;$('n').oninput=draw;
+draw();
+</script>
+</body>
+</html>
